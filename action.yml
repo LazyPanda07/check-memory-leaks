@@ -12,6 +12,11 @@ inputs:
     description: "Executable file name"  
     required: true
 
+  pre-execute:
+    description: "Some bash commands or scripts from 'path' directory"
+    required: false
+    default: ""
+
   args:
     description: "Executable arguments"
     required: false
@@ -36,6 +41,7 @@ runs:
     shell: bash
     run: |
         cd ${{ inputs.path }}
+        ${{ inputs.pre-execute }}
         VALGRIND_OUTPUT=$(valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./${{ inputs.name }} ${{ inputs.args }} 2>&1 >/dev/null)
         echo "VALGRIND_OUTPUT=${VALGRIND_OUTPUT}" >> "$GITHUB_ENV"
 
