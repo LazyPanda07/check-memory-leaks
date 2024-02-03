@@ -42,14 +42,12 @@ runs:
     run: |
         cd ${{ inputs.path }}
         ${{ inputs.pre-execute }}
-        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./${{ inputs.name }} ${{ inputs.args }}
-        export VALGRIND_OUTPUT=$(valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./${{ inputs.name }} ${{ inputs.args }} 2>&1 >/dev/null)
-        echo "VALGRIND_OUTPUT=${VALGRIND_OUTPUT}" >> $Env:GITHUB_ENV
-        echo ${{ env.VALGRIND_OUTPUT }}
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=memory_leaks_result.txt ./${{ inputs.name }} ${{ inputs.args }}
 
-  - name: Error
-    if: ${{ ! contains('env.VALGRIND_OUTPUT', 'All heap blocks were freed -- no leaks are possible') }}
-    shell: bash
-    run: |
-        echo ${{ env.VALGRIND_OUTPUT }}
-        exit 2
+  - name: Result
+      run: |
+          cd ${{ inputs.path }}
+          export VALGRIND_RESULT=$(grep -Rnw 'memory_leaks_result.txt' -e 'All heap blocks were freed -- no leaks are possible')
+          printf '#!/bin/bash\n\ncat memory_leaks_result.txt\n\nif [[ -z "${VALGRIND_RESULT}" ]];\nthen\n    exit 2\nfi\n' > check.sh
+          chmod +x check.sh
+          ./check.sh
