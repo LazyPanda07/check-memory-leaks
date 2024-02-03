@@ -45,9 +45,10 @@ runs:
         valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=memory_leaks_result.txt ./${{ inputs.name }} ${{ inputs.args }}
 
   - name: Result
-      run: |
-          cd ${{ inputs.path }}
-          export VALGRIND_RESULT=$(grep -Rnw 'memory_leaks_result.txt' -e 'All heap blocks were freed -- no leaks are possible')
-          printf '#!/bin/bash\n\ncat memory_leaks_result.txt\n\nif [[ -z "${VALGRIND_RESULT}" ]];\nthen\n    exit 2\nfi\n' > check.sh
-          chmod +x check.sh
-          ./check.sh
+    shell: bash
+    run: |
+        cd ${{ inputs.path }}
+        export VALGRIND_RESULT=$(grep -Rnw 'memory_leaks_result.txt' -e 'All heap blocks were freed -- no leaks are possible')
+        printf '#!/bin/bash\n\ncat memory_leaks_result.txt\n\nif [[ -z "${VALGRIND_RESULT}" ]];\nthen\n    exit 2\nfi\n' > check.sh
+        chmod +x check.sh
+        ./check.sh
