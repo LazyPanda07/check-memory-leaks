@@ -1,0 +1,47 @@
+name: "Check Memory Leaks"
+description: "Detect memory leaks in C/C++ programs. Linux only"
+author: "LazyPanda07"
+
+
+inputs:
+ path:
+  description: "Path directory with executable file"
+  required: true
+
+  name:
+    description: "Executable file name"  
+    required: true
+
+  args:
+    description: "Executable arguments"
+    required: false
+    default: ""
+
+runs:
+  using: "composite"
+
+  steps:
+  - name: Checks is running on Linux
+    if: ${{ runner.OS != 'Linux' }}
+    shell: bash
+    run: |
+        echo "Only supports Linux"
+        exit 1
+
+  - name: Install Valgrind
+    shell: bash
+    run: sudo apt install -y valgrind
+
+  - name: Start Valgrind test
+    shell: bash
+    run: |
+        cd ${{ inputs.path }}
+        VALGRIND_OUTPUT=$(valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./${{ inputs.name }} ${{ inputs.args }} 2>&1 >/dev/null)
+        echo "VALGRIND_OUTPUT=${VALGRIND_OUTPUT}" >> "$GITHUB_ENV"
+
+  - name: Error
+    if: ${{ ! contains('env.VALGRIND_OUTPUT', 'All heap blocks were freed -- no leaks are possible') }}
+    shell: bash
+    run: |
+        echo "${{ env.VALGRIND_OUTPUT }}"
+        exit 2
