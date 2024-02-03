@@ -42,6 +42,7 @@ runs:
     run: |
         cd ${{ inputs.path }}
         ${{ inputs.pre-execute }}
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./${{ inputs.name }} ${{ inputs.args }}
         export VALGRIND_OUTPUT=$(valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./${{ inputs.name }} ${{ inputs.args }} 2>&1 >/dev/null)
         echo "VALGRIND_OUTPUT=${VALGRIND_OUTPUT}" >> $Env:GITHUB_ENV
         echo ${{ env.VALGRIND_OUTPUT }}
