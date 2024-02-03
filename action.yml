@@ -4,9 +4,9 @@ author: "LazyPanda07"
 
 
 inputs:
- path:
-  description: "Path directory with executable file"
-  required: true
+  path:
+    description: "Path directory with executable file"
+    required: true
 
   name:
     description: "Executable file name"  
