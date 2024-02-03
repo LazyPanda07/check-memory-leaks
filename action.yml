@@ -1,6 +1,9 @@
 name: "Check Memory Leaks"
 description: "Detect memory leaks in C/C++ programs. Linux only"
 author: "LazyPanda07"
+branding:
+  icon: "alert-octagon"
+  color: "red"
 
 
 inputs:
