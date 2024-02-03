@@ -42,12 +42,12 @@ runs:
     run: |
         cd ${{ inputs.path }}
         ${{ inputs.pre-execute }}
-        VALGRIND_OUTPUT=$(valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./${{ inputs.name }} ${{ inputs.args }} 2>&1 >/dev/null)
-        echo "VALGRIND_OUTPUT='${VALGRIND_OUTPUT}'" >> $Env:GITHUB_ENV
+        export VALGRIND_OUTPUT=$(valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./${{ inputs.name }} ${{ inputs.args }} 2>&1 >/dev/null)
+        echo "VALGRIND_INFO=${VALGRIND_OUTPUT}" >> $Env:GITHUB_ENV
 
   - name: Error
-    if: ${{ ! contains('env.VALGRIND_OUTPUT', 'All heap blocks were freed -- no leaks are possible') }}
+    if: ${{ ! contains('env.VALGRIND_INFO', 'All heap blocks were freed -- no leaks are possible') }}
     shell: bash
     run: |
-        echo ${{ env.VALGRIND_OUTPUT }}
+        echo ${{ env.VALGRIND_INFO }}
         exit 2
