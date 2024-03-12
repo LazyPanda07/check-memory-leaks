@@ -20,6 +20,10 @@ Detect memory leaks in C/C++ programs
     # Executable arguments
     # Optional. Default is ""
     args:
+
+    # By default, Valgrind can handle to up to 500 threads. Occasionally, that number is too small. Use this option to provide a different limit. E.g. max-threads: 3000.
+    # Optional. Default is 500
+    max-threads:
 ```
 
 ## Source

@@ -25,6 +25,11 @@ inputs:
     required: false
     default: ""
 
+  max-threads:
+    description: "By default, Valgrind can handle to up to 500 threads. Occasionally, that number is too small. Use this option to provide a different limit. E.g. max-threads: 3000."
+    required: false
+    default: 500
+
 runs:
   using: "composite"
 
@@ -45,7 +50,7 @@ runs:
     run: |
         cd ${{ inputs.path }}
         ${{ inputs.pre-execute }}
-        valgrind --max-threads=8192 --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=memory_leaks_result.txt ./${{ inputs.name }} ${{ inputs.args }}
+        valgrind --max-threads=${{ inputs.max-threads }} --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=memory_leaks_result.txt ./${{ inputs.name }} ${{ inputs.args }}
 
   - name: Result
     shell: bash
