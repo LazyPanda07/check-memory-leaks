@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: LazyPanda07/check-memory-leaks@1
+    - uses: LazyPanda07/check-memory-leaks@1.1
       with:
         path: path/to/executable_directory
         name: executable
