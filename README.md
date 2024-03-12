@@ -3,7 +3,7 @@ Detect memory leaks in C/C++ programs
 
 # Usage
 ```yaml
-- uses: LazyPanda07/check-memory-leaks@v1
+- uses: LazyPanda07/check-memory-leaks@v1.1
   with:
     # Path directory with executable file.
     # Required.
