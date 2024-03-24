@@ -30,6 +30,11 @@ inputs:
     required: false
     default: 500
 
+  leak-kinds:
+    description: "List of leak kinds, separated by comma. Example: definite,possible. All available variants: definite, indirect, possible, reachable, all"
+    required: false
+    default: all
+
 runs:
   using: "composite"
 
@@ -50,7 +55,7 @@ runs:
     run: |
         cd ${{ inputs.path }}
         ${{ inputs.pre-execute }}
-        valgrind --max-threads=${{ inputs.max-threads }} --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=memory_leaks_result.txt ./${{ inputs.name }} ${{ inputs.args }}
+        valgrind --max-threads=${{ inputs.max-threads }} --leak-check=full --show-leak-kinds=${{ inputs.leak-kinds }} --track-origins=yes --log-file=memory_leaks_result.txt ./${{ inputs.name }} ${{ inputs.args }}
 
   - name: Result
     shell: bash

@@ -3,7 +3,7 @@ Detect memory leaks in C/C++ programs
 
 # Usage
 ```yaml
-- uses: LazyPanda07/check-memory-leaks@v1.1
+- uses: LazyPanda07/check-memory-leaks@v1.2
   with:
     # Path directory with executable file.
     # Required.
@@ -24,6 +24,10 @@ Detect memory leaks in C/C++ programs
     # By default, Valgrind can handle to up to 500 threads. Occasionally, that number is too small. Use this option to provide a different limit. E.g. max-threads: 3000.
     # Optional. Default is 500
     max-threads:
+
+    # List of leak kinds, separated by comma. Example: definite,possible. All available variants: definite, indirect, possible, reachable, all
+    # Optional. Default is all
+    leak-kinds:
 ```
 
 ## Source
@@ -41,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: LazyPanda07/check-memory-leaks@1.1
+    - uses: LazyPanda07/check-memory-leaks@1.2
       with:
         path: path/to/executable_directory
         name: executable
