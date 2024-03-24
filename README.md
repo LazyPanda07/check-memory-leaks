@@ -21,12 +21,12 @@ Detect memory leaks in C/C++ programs
     # Optional. Default is ""
     args:
 
-    # By default, Valgrind can handle to up to 500 threads. Occasionally, that number is too small. Use this option to provide a different limit. E.g. max-threads: 3000.
-    # Optional. Default is 500
+    # By default, Valgrind can handle to up to 1000 threads. Occasionally, that number is too small. Use this option to provide a different limit. E.g. max-threads: 3000.
+    # Optional. Default is 1000
     max-threads:
 
-    # List of leak kinds, separated by comma. Example: definite,possible. All available variants: definite, indirect, possible, reachable, all
-    # Optional. Default is all
+    # List of leak kinds, separated by comma. Example: definite,possible. All available variants: definite, indirect, possible, reachable, full
+    # Optional. Default is full
     leak-kinds:
 ```
 
