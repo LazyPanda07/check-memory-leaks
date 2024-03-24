@@ -25,8 +25,8 @@ Detect memory leaks in C/C++ programs
     # Optional. Default is 1000
     max-threads:
 
-    # List of leak kinds, separated by comma. Example: definite,possible. All available variants: definite, indirect, possible, reachable, full
-    # Optional. Default is full
+    # List of leak kinds, separated by comma. Example: definite,possible. All available variants: definite, indirect, possible, reachable, all
+    # Optional. Default is all
     leak-kinds:
 ```
 
