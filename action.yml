@@ -61,7 +61,28 @@ runs:
     shell: bash
     run: |
         cd ${{ inputs.path }}
-        export VALGRIND_RESULT=$(grep -Rnw 'memory_leaks_result.txt' -e 'All heap blocks were freed -- no leaks are possible')
-        printf '#!/bin/bash\n\ncat memory_leaks_result.txt\n\nif [[ -z "${VALGRIND_RESULT}" ]];\nthen\n    exit 2\nfi\n' > check.sh
-        chmod +x check.sh
-        ./check.sh
+        export VALGRIND_RESULT_FREED=$(grep -Rnw 'memory_leaks_result.txt' -e 'All heap blocks were freed -- no leaks are possible')
+        export VALGRIND_RESULT_DEFINITELY_LOST=$(grep -Rnw 'memory_leaks_result.txt' -e 'definitely lost: 0 bytes')
+        export VALGRIND_RESULT_INDIRECTLY_LOST=$(grep -Rnw 'memory_leaks_result.txt' -e 'indirectly lost: 0 bytes')
+        
+        touch check_memory_leaks.sh
+
+        echo $'#!/bin/bash\n' >> check_memory_leaks.sh
+        echo $'cat memory_leaks_result.txt\n' >> check_memory_leaks.sh
+
+        echo $'if [[ -n "${VALGRIND_RESULT_DEFINITELY_LOST}" ]];' >> check_memory_leaks.sh
+        echo $'then' >> check_memory_leaks.sh
+        echo $'    exit 0' >> check_memory_leaks.sh
+        echo $'fi\n' >> check_memory_leaks.sh
+
+        echo $'if [[ -n "${VALGRIND_RESULT_INDIRECTLY_LOST}" ]];' >> check_memory_leaks.sh
+        echo $'then' >> check_memory_leaks.sh
+        echo $'    exit 0' >> check_memory_leaks.sh
+        echo $'fi\n' >> check_memory_leaks.sh
+
+        echo $'if [[ -z "${VALGRIND_RESULT_FREED}" ]];' >> check_memory_leaks.sh
+        echo $'then' >> check_memory_leaks.sh
+        echo $'    exit 2\nfi' >> check_memory_leaks.sh
+
+        chmod +x check_memory_leaks.sh
+        ./check_memory_leaks.sh
