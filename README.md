@@ -3,7 +3,7 @@ Detect memory leaks in C/C++ programs
 
 # Usage
 ```yaml
-- uses: LazyPanda07/check-memory-leaks@v1.3
+- uses: LazyPanda07/check-memory-leaks@v1.4
   with:
     # Path directory with executable file.
     # Required.
@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: LazyPanda07/check-memory-leaks@1.3
+    - uses: LazyPanda07/check-memory-leaks@1.4
       with:
         path: path/to/executable_directory
         name: executable

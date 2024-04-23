@@ -48,7 +48,9 @@ runs:
 
   - name: Install Valgrind
     shell: bash
-    run: sudo apt install -y valgrind
+    run: |
+        sudo apt update -y
+        sudo apt install valgrind -y
 
   - name: Start Valgrind test
     shell: bash
